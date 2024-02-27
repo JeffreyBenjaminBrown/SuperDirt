@@ -6,12 +6,12 @@
 // "accelerate" is used for a pitch glide, and "sustain" changes the envelope timescale
 (
         SynthDef(\supermandolin, {
-          |out,
-          sustain=1,
-          pan,
-          accelerate,
-          freq,
-          detune=0.2 |
+          | out,
+            sustain=1,
+            pan,
+            accelerate,
+            freq,
+            detune=0.2 |
                 var env = EnvGen.ar(Env.linen(0.002, 0.996, 0.002, 1,-3), timeScale:sustain, doneAction:2);
                 var sound = Decay.ar(Impulse.ar(0,0,0.1), 0.1*(freq.cpsmidi)/69) * WhiteNoise.ar;
                 var pitch = freq * Line.kr(1, 1+accelerate, sustain);
@@ -29,13 +29,13 @@
 // for a demo, try this in Tidal
 // d1 $ n (slow 2 $ fmap (*7) $ run 8) # s "supergong" # decay "[1 0.2]/4" # voice "[0.5 0]/8"
 (
-        SynthDef(\supergong,{|out,
-                              sustain=1,
-                              pan,
-                              accelerate,
-                              freq,
-                              voice=0,
-                              decay=1 |
+        SynthDef(\supergong,{ | out,
+                                sustain=1,
+                                pan,
+                                accelerate,
+                                freq,
+                                voice=0,
+                                decay=1 |
                 // lowest modes for clamped circular plate
                 var freqlist =[1.000,  2.081,  3.414,  3.893,  4.995,  5.954,  6.819,  8.280,  8.722,  8.882, 10.868, 11.180, 11.754,
                         13.710, 13.715, 15.057, 15.484, 16.469, 16.817, 18.628]**1.0;
@@ -52,7 +52,14 @@
 // uses the "velocity" parameter to affect how hard the keys are pressed
 // "sustain" controls envelope and decay time
 (
-        SynthDef(\superpiano,{|out, sustain=1, pan, velocity=1, detune=0.1, muffle=1, stereo=0.2, freq=440 |
+        SynthDef(\superpiano,{ | out,
+	                         sustain=1,
+	                         pan,
+	                         velocity=1,
+	                         detune=0.1,
+	                         muffle=1,
+	                         stereo=0.2,
+	                         freq=440 |
                 var env = EnvGen.ar(Env.linen(0.002, 0.996, 0.002, 1,-3), timeScale:sustain, doneAction:2);
                 // the +0.01 to freq is because of edge case rounding internal to the MdaPiano synth
                 var sound = MdaPiano.ar(freq+0.01, vel:velocity*100, hard:0.8*velocity, decay:0.1*sustain,
@@ -63,7 +70,12 @@
 
 // waveguide mesh, hexagonal drum-like membrane
 (
-        SynthDef(\superhex,{|out, rate=1, sustain=1, pan, freq, accelerate |
+        SynthDef(\superhex,{ | out,
+	                       rate=1,
+	                       sustain=1,
+	                       pan,
+	                       freq,
+	                       accelerate |
                 var env = EnvGen.ar(Env.linen(0.02, 0.96, 0.02, 1,-3), timeScale:sustain, doneAction:2);
                 var tension = 0.05*freq/400 * Line.kr(1,accelerate+1, sustain);
                 var loss = 1.0 - (0.01 * rate / freq);
@@ -79,7 +91,13 @@
 // "sustain" affects overall envelope timescale, "accelerate" sweeps the click filter freq,
 // "pitch1" affects the click frequency, and "decay" changes the click duration relative to the overall timescale
 (
-        SynthDef(\superkick, {|out, sustain=1, pan, accelerate, n, pitch1=1, decay=1 |
+        SynthDef(\superkick, { | out,
+	                         sustain=1,
+	                         pan,
+	                         accelerate,
+	                         n,
+	                         pitch1=1,
+	                         decay=1 |
                 var env, sound, dur, clickdur;
                 env = EnvGen.ar(Env.linen(0.01, 0, 0.5, 1, -3), timeScale:sustain, doneAction:2);
                 sound = SinOsc.ar((n - 25.5).midicps);
@@ -94,7 +112,12 @@
 // "n" controls the chirp frequency, "sustain" the overall timescale, "rate" the filter sweep speed,
 // and "voice" the sinewave feedback
 (
-        SynthDef(\super808, {|out, rate=1, sustain=1, pan, voice=0, n |
+        SynthDef(\super808, { | out,
+	                        rate=1,
+	                        sustain=1,
+	                        pan,
+	                        voice=0,
+	                        n |
                 var env, sound, freq;
                 n = ((n>0)*n) + ((n<1)*3);
                 freq = (n*10).midicps;
