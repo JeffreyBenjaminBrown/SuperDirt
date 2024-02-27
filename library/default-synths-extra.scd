@@ -5,7 +5,13 @@
 // To make it a bit richer, I've combined two slightly detuned delay lines
 // "accelerate" is used for a pitch glide, and "sustain" changes the envelope timescale
 (
-	SynthDef(\supermandolin, {|out, sustain=1, pan, accelerate, freq, detune=0.2 |
+        SynthDef(\supermandolin, {
+          |out,
+          sustain=1,
+          pan,
+          accelerate,
+          freq,
+          detune=0.2 |
 		var env = EnvGen.ar(Env.linen(0.002, 0.996, 0.002, 1,-3), timeScale:sustain, doneAction:2);
 		var sound = Decay.ar(Impulse.ar(0,0,0.1), 0.1*(freq.cpsmidi)/69) * WhiteNoise.ar;
 		var pitch = freq * Line.kr(1, 1+accelerate, sustain);
@@ -23,7 +29,13 @@
 // for a demo, try this in Tidal
 // d1 $ n (slow 2 $ fmap (*7) $ run 8) # s "supergong" # decay "[1 0.2]/4" # voice "[0.5 0]/8"
 (
-	SynthDef(\supergong,{|out, sustain=1, pan, accelerate, freq, voice=0, decay=1 |
+        SynthDef(\supergong,{|out,
+                              sustain=1,
+                              pan,
+                              accelerate,
+                              freq,
+                              voice=0,
+                              decay=1 |
 		// lowest modes for clamped circular plate
 		var freqlist =[1.000,  2.081,  3.414,  3.893,  4.995,  5.954,  6.819,  8.280,  8.722,  8.882, 10.868, 11.180, 11.754,
 			13.710, 13.715, 15.057, 15.484, 16.469, 16.817, 18.628]**1.0;
@@ -190,8 +202,20 @@
 // a moog-inspired sawtooth synth; slightly detuned saws with triangle harmonics, filter frequency modulated by LFO
 // "voice" controls a relative phase and detune amount
 (
-	SynthDef(\supersaw, {|out, rate=1, decay=0, sustain=1, pan, accelerate, freq,
-		voice=0.5, semitone=12, resonance=0.2, lfo=1, pitch1=1|
+        SynthDef(\supersaw, {
+          | out,
+            rate=1,
+            decay=0,
+            sustain=1,
+            pan,
+            accelerate,
+            freq,
+            voice=0.5,
+            semitone=12,
+            resonance=0.2,
+            lfo=1,
+            pitch1=1|
+
 		var env = EnvGen.ar(Env.pairs([[0,0],[0.05,1],[0.2,1-decay],[0.95,1-decay],[1,0]], -3), timeScale:sustain, doneAction:2);
 		var basefreq = freq * Line.kr(1, 1+accelerate, sustain);
 		var basefreq2 = basefreq * (2**(semitone/12));
@@ -206,12 +230,22 @@
 	}).add
 );
 
-
 // a moog-inspired PWM synth; pulses multiplied by phase-shifted pulses, double filtering with an envelope on the second
 // "voice" controls the phase shift rate
 (
-	SynthDef(\superpwm, {|out, rate=1, decay=0, sustain=1, pan, accelerate, freq,
-		voice=0.5, semitone=12, resonance=0.2, lfo=1, pitch1=1|
+        SynthDef(\superpwm, {
+          | out,
+            rate=1,
+            decay=0,
+            sustain=1,
+            pan,
+            accelerate,
+            freq,
+            voice=0.5,
+            semitone=12,
+            resonance=0.2,
+            lfo=1,
+            pitch1=1|
 		var env = EnvGen.ar(Env.pairs([[0,0],[0.05,1],[0.2,1-decay],[0.95,1-decay],[1,0]], -3), timeScale:sustain, doneAction:2);
 		var env2 = EnvGen.ar(Env.pairs([[0,0.1],[0.1,1],[0.4,0.5],[0.9,0.2],[1,0.2]], -3), timeScale:sustain/rate);
 		var basefreq = freq * Line.kr(1, 1+accelerate, sustain);
@@ -230,8 +264,18 @@
 
 // "voice" scales the comparator frequencies, higher values will sound "breathier"
 (
-	SynthDef(\supercomparator, {|out, rate=1, decay=0, sustain=1, pan, accelerate, freq,
-		voice=0.5, resonance=0.5, lfo=1, pitch1=1|
+        SynthDef(\supercomparator, {
+          | out,
+            rate=1,
+            decay=0,
+            sustain=1,
+            pan,
+            accelerate,
+            freq,
+            voice=0.5,
+            resonance=0.5,
+            lfo=1,
+            pitch1=1|
 		var env = EnvGen.ar(Env.pairs([[0,0],[0.05,1],[0.2,1-decay],[0.95,1-decay],[1,0]], -3), timeScale:sustain, doneAction:2);
 		var basefreq = freq * Line.kr(1, 1+accelerate, sustain);
 		var sound = VarSaw.ar(basefreq, 0, Line.ar(0,1,sustain));
@@ -253,7 +297,17 @@
 // "pitch2" and "pitch3" control the ratio of harmonics
 // "voice" causes variations in the levels of the 3 oscillators
 (
-	SynthDef(\superchip, {|out, sustain=1, pan, freq, rate=1, slide=0, pitch2=2, pitch3=3, accelerate, voice=0|
+        SynthDef(\superchip, {
+          | out,
+            sustain=1,
+            pan,
+            freq,
+            rate=1,
+            slide=0,
+            pitch2=2,
+            pitch3=3,
+            accelerate,
+            voice=0|
 		var env, basefreq, sound, va, vb, vc;
 		env = EnvGen.ar(Env.linen(0.01, 0.98, 0.01,1,-1), timeScale:sustain, doneAction:2);
 		basefreq = freq + wrap2(slide * 100 * Line.kr(-1,1+(2*rate-2),sustain), slide * 100);
@@ -402,7 +456,15 @@ SynthDef(\superhoover, {|out, sustain=1, decay=0, pan, freq, accelerate=0, slide
 // "slide" here is how fast it moves through the phase (default 1)
 // "detune" is for oscillator detuning and defaults to 1
 (
-SynthDef(\superzow, {|out, sustain=1, pan, accelerate, freq, decay=0, slide=1, detune=1 |
+SynthDef(\superzow, {
+         |out,
+         sustain=1,
+         pan,
+         accelerate,
+         freq,
+         decay=0,
+         slide=1,
+         detune=1 |
 	var env = EnvGen.ar(Env.pairs([[0,0],[0.07,1],[0.2,1-decay],[0.95,1-decay],[1,0]], -1), timeScale:sustain, doneAction:2);
 	var basefreq = freq * Line.kr(1, 1+accelerate, sustain);
 	var sound = VarSaw.ar(basefreq, 0, Line.ar(0,0.5,sustain*20/slide));
@@ -495,7 +557,14 @@ SynthDef(\superwavemechanics, {|out, pan, freq, sustain, accelerate, detune=0, v
 // can use "accelerate" "voice" and "detune" parameters
 // try `d1 $ s "supertron" # octave 3 # accelerate "0.2"`
 (
-SynthDef(\supertron, {|out, pan, freq, sustain, voice, detune, accelerate|
+SynthDef(\supertron, {
+          | out,
+            pan,
+            freq,
+            sustain,
+            voice,
+            detune,
+            accelerate|
 	var sound, aenv, s1, s2;
 	aenv = EnvGen.ar(Env.linen(0.05, 0.85, 0.1, 1, 'lin'), timeScale:sustain, doneAction:2);
 	freq = freq * XLine.ar(1, exp(accelerate), sustain);
