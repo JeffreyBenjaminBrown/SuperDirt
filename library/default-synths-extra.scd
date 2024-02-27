@@ -563,13 +563,13 @@ SynthDef(\supertron, {
             freq,
             sustain,
             voice,
-            detune,
+            detune=0.01,
             accelerate|
 	var sound, aenv, s1, s2;
 	aenv = EnvGen.ar(Env.linen(0.05, 0.85, 0.1, 1, 'lin'), timeScale:sustain, doneAction:2);
 	freq = freq * XLine.ar(1, exp(accelerate), sustain);
 	sound = LocalIn.ar(1);
-	sound = Mix.ar( Pulse.ar(freq+[1+detune,-1-detune], RLPF.ar(sound, freq/6.1, 1.5).range(0,1-(voice/1.5))) );
+        sound = Mix.ar( Pulse.ar(freq*[1+detune,1-detune], RLPF.ar(sound, freq/6.1, 1.5).range(0,1-(voice/1.5))) );
 	sound = LeakDC.ar(sound);
 	LocalOut.ar(sound);
 	Out.ar(out, DirtPan.ar(sound, ~dirt.numChannels, pan, aenv))
